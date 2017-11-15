@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">TopGames</string>
+    <string name="baseUrl">https://api.twitch.tv/kraken/games/</string>
+    <string name="error_msg">Desculpe, não foi possível buscar os Games.</string>
+    <string name="btn_retry">Atualizar</string>
+    <string name="tap_to_reload">Toque para Atualizar</string>
+    <string name="error_msg_unknown">Um erro inesperado ocorreu.</string>
+    <string name="error_msg_timeout">O servidor demorou muito para responder.</string>
+    <string name="error_msg_no_internet">Sem conexão com a internet.</string>
+</resources>
