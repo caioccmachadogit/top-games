@@ -12,9 +12,9 @@ import com.bumptech.glide.load.resource.drawable.GlideDrawable
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.topgames.ccouto.topgames.R
-import com.topgames.ccouto.topgames.domain.Game
 import com.topgames.ccouto.topgames.domain.Top
 import com.topgames.ccouto.topgames.extensions.inflate
+import com.topgames.ccouto.topgames.utils.ImageUtil
 import com.topgames.ccouto.topgames.utils.PaginationAdapterCallback
 import kotlinx.android.synthetic.main.item_list.view.*
 import kotlinx.android.synthetic.main.item_progress.view.*
@@ -64,7 +64,7 @@ class PaginationAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> {
         when(getItemViewType(position)){
             ITEM ->{
                 holder as GameViewHolder
-                holder.bind(top.game!!)
+                holder.bind(top)
             }
             LOADING->{
                 holder as LoadingViewHolder
@@ -89,21 +89,26 @@ class PaginationAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> {
         private val mGamePoster =  itemView.game_poster
         private val mGameProgress =  itemView.game_progress
 
-        fun bind(item: Game) {
-            mName.text = item.name
-            loadImage(item.box.large).listener(object : RequestListener<String, GlideDrawable>{
-                override fun onResourceReady(resource: GlideDrawable?, model: String?, target: Target<GlideDrawable>?, isFromMemoryCache: Boolean, isFirstResource: Boolean): Boolean {
-                    mGameProgress.visibility = View.GONE
-                    return false
-                }
+        fun bind(top: Top) {
+            val item = top.game?.apply {
+                mName.text = name
+                ImageUtil.loadImage(box.large, context, true).listener(object : RequestListener<String, GlideDrawable>{
+                    override fun onResourceReady(resource: GlideDrawable?, model: String?, target: Target<GlideDrawable>?, isFromMemoryCache: Boolean, isFirstResource: Boolean): Boolean {
+                        mGameProgress.visibility = View.GONE
+                        return false
+                    }
 
-                override fun onException(e: Exception?, model: String?, target: Target<GlideDrawable>?, isFirstResource: Boolean): Boolean {
-                    mGameProgress.visibility = View.GONE
-                    return false
-                }
-            }).into(mGamePoster)
+                    override fun onException(e: Exception?, model: String?, target: Target<GlideDrawable>?, isFirstResource: Boolean): Boolean {
+                        mGameProgress.visibility = View.GONE
+                        return false
+                    }
+                }).into(mGamePoster)
 
-            super.itemView.setOnClickListener { Log.d("itemView", "onclick")}
+                super.itemView.setOnClickListener {
+                    Log.d("itemView", "onclick")
+                    mCallback.onClickItem(top)
+                }
+            }
         }
     }
 
@@ -179,14 +184,5 @@ class PaginationAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> {
     fun addLoadingFooter() {
         isLoadingAdded = true
         add(Top(null,"",""))
-    }
-
-    private fun loadImage(posterPath: String): DrawableRequestBuilder<String> {
-        return Glide
-                .with(context)
-                .load(posterPath)
-                .diskCacheStrategy(DiskCacheStrategy.ALL)   // cache both original & resized image
-                .centerCrop()
-                .crossFade()
     }
 }

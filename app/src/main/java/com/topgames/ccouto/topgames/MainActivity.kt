@@ -1,5 +1,6 @@
 package com.topgames.ccouto.topgames
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
@@ -9,6 +10,7 @@ import com.topgames.ccouto.topgames.adapter.PaginationAdapter
 import com.topgames.ccouto.topgames.api.CallBackGeneric
 import com.topgames.ccouto.topgames.api.GameService
 import com.topgames.ccouto.topgames.domain.GameResponse
+import com.topgames.ccouto.topgames.domain.Top
 import com.topgames.ccouto.topgames.utils.PaginationAdapterCallback
 import com.topgames.ccouto.topgames.utils.PaginationScrollListener
 import kotlinx.android.synthetic.main.activity_main.*
@@ -52,7 +54,7 @@ class MainActivity : BaseActivity(), PaginationAdapterCallback {
 
             loadFirstPage()
 
-            swipeRefreshLayout.setRefreshing(false);
+            swipeRefreshLayout.isRefreshing = false;
         }
     }
 
@@ -151,6 +153,12 @@ class MainActivity : BaseActivity(), PaginationAdapterCallback {
 
     override fun retryPageLoad() {
         loadNextPage()
+    }
+
+    override fun onClickItem(top: Top) {
+        val intent = Intent(this, DetalhesActivity::class.java)
+        intent.putExtra("top", top)
+        startActivity(intent)
     }
 
     private fun hideErrorView() {
