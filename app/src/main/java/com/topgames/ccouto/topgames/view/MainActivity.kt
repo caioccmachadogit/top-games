@@ -1,20 +1,23 @@
-package com.topgames.ccouto.topgames
+package com.topgames.ccouto.topgames.view
 
-import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import android.view.View
-import com.topgames.ccouto.topgames.adapter.PaginationAdapter
+import com.topgames.ccouto.topgames.R
+import com.topgames.ccouto.topgames.view.adapter.PaginationAdapter
 import com.topgames.ccouto.topgames.api.CallBackGeneric
 import com.topgames.ccouto.topgames.api.GameService
+import com.topgames.ccouto.topgames.base.BaseActivity
+import com.topgames.ccouto.topgames.base.Constants
 import com.topgames.ccouto.topgames.domain.GameResponse
 import com.topgames.ccouto.topgames.domain.Top
 import com.topgames.ccouto.topgames.utils.PaginationAdapterCallback
 import com.topgames.ccouto.topgames.utils.PaginationScrollListener
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.error_layout.*
+import org.jetbrains.anko.startActivity
 
 class MainActivity : BaseActivity(), PaginationAdapterCallback {
 
@@ -62,10 +65,10 @@ class MainActivity : BaseActivity(), PaginationAdapterCallback {
         adapter = PaginationAdapter(this@MainActivity)
 
         linearLayoutManager = LinearLayoutManager(this@MainActivity, LinearLayoutManager.VERTICAL, false)
-        mainRecycler.setLayoutManager(linearLayoutManager)
-        mainRecycler.setItemAnimator(DefaultItemAnimator())
+        mainRecycler.layoutManager = linearLayoutManager
+        mainRecycler.itemAnimator = DefaultItemAnimator()
 
-        mainRecycler.setAdapter(adapter)
+        mainRecycler.adapter = adapter
 
         mainRecycler.addOnScrollListener(object : PaginationScrollListener(linearLayoutManager){
             override fun isLastPage(): Boolean {
@@ -156,9 +159,7 @@ class MainActivity : BaseActivity(), PaginationAdapterCallback {
     }
 
     override fun onClickItem(top: Top) {
-        val intent = Intent(this, DetalhesActivity::class.java)
-        intent.putExtra("top", top)
-        startActivity(intent)
+        startActivity<DetalhesActivity>(Constants.PAR_TOP to top)
     }
 
     private fun hideErrorView() {

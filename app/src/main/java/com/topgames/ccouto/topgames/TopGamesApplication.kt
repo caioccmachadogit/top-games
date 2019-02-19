@@ -5,22 +5,17 @@ import android.util.Log
 import java.lang.IllegalStateException
 
 /**
- * Created by ccouto on 14/11/2017.
+ * Created by ccouto on 19/02/2019.
  */
 class TopGamesApplicationApplication : Application() {
     private val TAG = "TopGamesApplication"
 
-    val flagSendLog = true
-
-    // Chamado quando o Android criar o processo da aplicação
     override fun onCreate() {
         super.onCreate()
-        // Salva a instância para termos acesso como Singleton
         appInstance = this
     }
 
     companion object {
-        // Singleton da classe Application
         private var appInstance: TopGamesApplicationApplication? = null
 
         fun getInstance(): TopGamesApplicationApplication {
@@ -31,7 +26,6 @@ class TopGamesApplicationApplication : Application() {
         }
     }
 
-    // Chamado quando o Android finalizar o processo da aplicação
     override fun onTerminate() {
         super.onTerminate()
         Log.d(TAG, "onTerminate()")

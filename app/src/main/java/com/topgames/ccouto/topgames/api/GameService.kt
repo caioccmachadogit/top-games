@@ -17,16 +17,15 @@ import java.util.concurrent.TimeUnit
 import java.util.concurrent.TimeoutException
 
 /**
- * Created by ccouto on 14/11/2017.
+ * Created by ccouto on 19/02/2019.
  */
 object GameService {
-    private val BASE_URL = TopGamesApplicationApplication.getInstance().resources.getString(R.string.baseUrl)
     private var service : GameREST
-    private val CODE_200 = 200
+    private const val CODE_200 = 200
 
     init {
         val interceptor = HttpLoggingInterceptor()
-        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+        interceptor.level = HttpLoggingInterceptor.Level.BODY;
 
         val okHttpClient = OkHttpClient.Builder()
                 .addNetworkInterceptor(interceptor)
@@ -36,7 +35,7 @@ object GameService {
                 .build()
 
         val retrofit = Retrofit.Builder()
-                .baseUrl(BASE_URL)
+                .baseUrl(ApiConstants.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(okHttpClient)
                 .build()
@@ -55,7 +54,7 @@ object GameService {
 
             override fun onFailure(call: Call<GameResponse>?, t: Throwable?) {
                 t?.printStackTrace()
-                var error = fetchErrorMessage(t!!)
+                val error = fetchErrorMessage(t!!)
                 callBackGeneric.onError(GameResponse(null,null,error))
             }
         } )

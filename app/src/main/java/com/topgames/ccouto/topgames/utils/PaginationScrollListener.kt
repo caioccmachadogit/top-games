@@ -4,7 +4,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 
 /**
- * Created by ccouto on 15/11/2017.
+ * Created by ccouto on 19/02/2019.
  */
 abstract class PaginationScrollListener
 /**
@@ -12,7 +12,7 @@ abstract class PaginationScrollListener
  *
  * @param layoutManager
  */
-(internal var layoutManager: LinearLayoutManager) : RecyclerView.OnScrollListener() {
+(private var layoutManager: LinearLayoutManager) : RecyclerView.OnScrollListener() {
 
     abstract val totalPageCount: Int
 
@@ -20,7 +20,7 @@ abstract class PaginationScrollListener
 
     abstract fun isLoading() : Boolean
 
-    override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
+    override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
         super.onScrolled(recyclerView, dx, dy)
 
         val visibleItemCount = layoutManager.childCount

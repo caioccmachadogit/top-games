@@ -1,11 +1,11 @@
-package com.topgames.ccouto.topgames
+package com.topgames.ccouto.topgames.base
 
 import android.content.Context
 import android.support.v7.app.AppCompatActivity
 import android.widget.Toast
 
 /**
- * Created by ccouto on 14/11/2017.
+ * Created by ccouto on 19/02/2019.
  */
 open class BaseActivity : AppCompatActivity() {
 

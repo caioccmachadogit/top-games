@@ -1,13 +1,10 @@
-package com.topgames.ccouto.topgames.adapter
+package com.topgames.ccouto.topgames.view.adapter
 
 import android.content.Context
 import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
-import com.bumptech.glide.DrawableRequestBuilder
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.resource.drawable.GlideDrawable
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
@@ -21,45 +18,36 @@ import kotlinx.android.synthetic.main.item_progress.view.*
 import java.lang.Exception
 
 /**
- * Created by ccouto on 15/11/2017.
+ * Created by ccouto on 19/02/2019.
  */
-class PaginationAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> {
+class PaginationAdapter(private val context: Context) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+
     // View Types
     private val ITEM = 0
-    private val LOADING = 1
 
-    private var listTop: MutableList<Top>
-    private val context: Context
+    private val LOADING = 1
+    private var listTop: MutableList<Top> = ArrayList()
 
     private var isLoadingAdded = false
-    private var retryPageLoad = false
 
+    private var retryPageLoad = false
     private var errorMsg: String? = null
 
-    private val mCallback: PaginationAdapterCallback
-
-    constructor(context: Context) : super() {
-        this.context = context
-        this.mCallback = context as PaginationAdapterCallback
-        this.listTop = ArrayList<Top>()
-    }
-
-
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): RecyclerView.ViewHolder {
-        when(viewType){
+    override fun onCreateViewHolder(p0: ViewGroup, p1: Int): RecyclerView.ViewHolder {
+        when(p1){
             ITEM ->{
-                return GameViewHolder(parent!!)
+                return GameViewHolder(p0)
             }
             LOADING -> {
-                return LoadingViewHolder(parent!!)
+                return LoadingViewHolder(p0)
             }
             else ->
-                return LoadingViewHolder(parent!!)
+                return LoadingViewHolder(p0)
         }
     }
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder?, position: Int) {
-        val top: Top = listTop.get(position)
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        val top: Top = listTop[position]
 
         when(getItemViewType(position)){
             ITEM ->{
@@ -72,6 +60,8 @@ class PaginationAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> {
             }
         }
     }
+
+    private val mCallback: PaginationAdapterCallback = context as PaginationAdapterCallback
 
     override fun getItemViewType(position: Int): Int {
         if(position == listTop.size-1 && isLoadingAdded)
@@ -90,7 +80,7 @@ class PaginationAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> {
         private val mGameProgress =  itemView.game_progress
 
         fun bind(top: Top) {
-            val item = top.game?.apply {
+            top.game?.apply {
                 mName.text = name
                 ImageUtil.loadImage(box.large, context, true).listener(object : RequestListener<String, GlideDrawable>{
                     override fun onResourceReady(resource: GlideDrawable?, model: String?, target: Target<GlideDrawable>?, isFromMemoryCache: Boolean, isFirstResource: Boolean): Boolean {
@@ -147,8 +137,8 @@ class PaginationAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
     }
 
-    fun getItem(position: Int): Top {
-        return listTop.get(position)
+    private fun getItem(position: Int): Top {
+        return listTop[position]
     }
 
     fun showRetry(show: Boolean, error: String?) {
@@ -162,9 +152,7 @@ class PaginationAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> {
         isLoadingAdded = false
 
         val position = listTop.size - 1
-        val result = getItem(position)
-
-        if (result != null) {
+        getItem(position).let {
             listTop.removeAt(position)
             notifyItemRemoved(position)
         }

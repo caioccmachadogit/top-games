@@ -6,20 +6,20 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 
 /**
- * Created by ccouto on 15/11/2017.
+ * Created by ccouto on 19/02/2019.
  */
 object ImageUtil {
 
     fun loadImage(posterPath: String, context : Context, isCrop:Boolean): DrawableRequestBuilder<String> {
-        if(isCrop)
-            return Glide
-                .with(context)
-                .load(posterPath)
-                .diskCacheStrategy(DiskCacheStrategy.ALL)   // cache both original & resized image
-                .centerCrop()
-                .crossFade()
+        return if(isCrop)
+            Glide
+                    .with(context)
+                    .load(posterPath)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)   // cache both original & resized image
+                    .centerCrop()
+                    .crossFade()
         else
-            return Glide
+            Glide
                     .with(context)
                     .load(posterPath)
                     .diskCacheStrategy(DiskCacheStrategy.ALL)   // cache both original & resized image

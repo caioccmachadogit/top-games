@@ -5,7 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 
 /**
- * Created by ccouto on 15/11/2017.
+ * Created by ccouto on 19/02/2019.
  */
 
 fun ViewGroup.inflate(layoutId: Int, attachToRoot: Boolean = false): View {
